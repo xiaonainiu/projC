@@ -2,8 +2,6 @@
  * Created by Shen YI(844373) syi2 on 2017/3/20.
  */
 
-import java.util.Objects;
-
 public class NimPlayer {
 
     String username;
@@ -13,7 +11,7 @@ public class NimPlayer {
     int win;
 
     //    define a NimPlayer class
-    public NimPlayer(String username, String firstname, String lastname) {
+    public NimPlayer(String username, String lastname, String firstname) {
         this.username = username;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -93,6 +91,14 @@ public class NimPlayer {
     public void Lose() {
         this.game++;
     }
+
+    public String[] getUpdatefile(){
+        String[] players = new String[5];
+        players[0]=username;
+        players[1]=lastname;
+        players[2]=firstname;
+        players[3]=Integer.toString(game);
+        players[4]=Integer.toString(win);
+        return players;
+    }
 }
-
-
