@@ -87,7 +87,7 @@ public class Nimsys {
                 }else invalidArgument();
             }
         } else if (commandsplit[0].equals("exit")) {
-            updateFile();
+            write();
             System.out.println();
             System.exit(0);
         } else {
@@ -320,84 +320,133 @@ public class Nimsys {
         }
     }
 
-    private static void checkFile(File file,String fileNmae){
-        if (!file.exists()){
-            creat(fileNmae);
-        }
-    }
-    private static void creat(String fileName){
-        PrintWriter outputStream = null;
-        try
-        {
-            outputStream = new PrintWriter(new FileOutputStream(fileName));
-        }
-        catch(FileNotFoundException e)
-        {
-            System.out.println("Error opening the file " + fileName);
-            System.exit(0);
-        }
-        outputStream.close( );
-    }
-
-//    private static void write(){
-//        NimPlayer a = playerlist[0];
-//        String username = "es";
-//        String lastname = "shen";
-//        String firstname = "yi";
-//        a = new NimPlayer(username,lastname,firstname);
-//
+//    private static void checkFile(File file,String fileNmae){
+//        if (!file.exists()){
+//            creat(fileNmae);
+//        }
+//    }
+//    private static void creat(String fileName){
+//        PrintWriter outputStream = null;
 //        try
 //        {
-//            ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("players.dat"));
-//
-//            outputStream.writeObject(a);
-//            outputStream.close( );
-//        }
-//        catch(IOException e)
-//        {
-//            System.out.println("Error writing to file.");
-//            System.exit(0);
-//        }
-//
-//        System.out.println(
-//                "Array written to file players.dat.");
-//
-//        System.out.println(
-//                "Now let's reopen the file and display the array.");
-//
-//        NimPlayer[] b = null;
-//
-//        try
-//        {
-//            ObjectInputStream inputStream =
-//                    new ObjectInputStream(new FileInputStream("players.dat"));
-//            b = (NimPlayer [])inputStream.readObject( );
-//            inputStream.close( );
+//            outputStream = new PrintWriter(new FileOutputStream(fileName));
 //        }
 //        catch(FileNotFoundException e)
 //        {
-//            System.out.println("Cannot find file players.dat.");
+//            System.out.println("Error opening the file " + fileName);
 //            System.exit(0);
 //        }
-//        catch(ClassNotFoundException e)
-//        {
-//            System.out.println("Problems with file input.");
-//            System.exit(0);
-//        }
-//        catch(IOException e)
-//        {
-//            System.out.println("Problems with file input.");
-//            System.exit(0);
-//        }
-//
-//        System.out.println(
-//                "The following array elements were read from the file:");
-//        int i;
-//        for (i = 0; i < b.length; i++)
-//            System.out.println(b[i]);
-//
-//        System.out.println("End of program.");
+//        outputStream.close( );
 //    }
+
+    private static void write(){
+
+        for (int i = 0; i < 100; i++) {
+            NimPlayer player = playerlist[i];
+//            String[][] players = new String[i][j];
+            if (playerlist[i] != null) {
+                String[] a = player.getUpdatefile();
+                for (int k=0;k<a.length;k++){
+
+                }
+                try
+                {
+                    ObjectOutputStream outputStream =
+                            new ObjectOutputStream(new FileOutputStream("players.dat"));
+
+                    outputStream.writeObject(a);
+                    outputStream.close( );
+                }
+                catch(IOException e)
+                {
+                    System.out.println("Error writing to file.");
+                    System.exit(0);
+                }
+
+                System.out.println(
+                        "Array written to file players.dat.");
+
+                System.out.println(
+                        "Now let's reopen the file and display the array.");
+
+                String[] b = null;
+
+                try
+                {
+                    ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("players.dat"));
+                    b = (String [])inputStream.readObject( );
+                    inputStream.close( );
+                }
+                catch(FileNotFoundException e)
+                {
+                    System.out.println("Cannot find file players.dat.");
+                    System.exit(0);
+                }
+                catch(ClassNotFoundException e)
+                {
+                    System.out.println("Problems with file input.");
+                    System.exit(0);
+                }
+                catch(IOException e)
+                {
+                    System.out.println("Problems with file input.");
+                    System.exit(0);
+                }
+
+                System.out.println(
+                        "The following array elements were read from the file:");
+                int j;
+                for (j = 0; j < b.length; j++)
+                    System.out.println(b[j]);
+
+                System.out.println("End of program.");
+            } else {
+                return;
+            }
+        }
+
+//    String [] a = new String[];
+//    a[0] = new SomeClass(1, 'A');
+//    a[1] = new SomeClass(2, 'B');
+
+
+    }
+    private static void read(){
+        System.out.println(
+                "Now let's reopen the file and display the array.");
+
+        String[] b = null;
+
+        try
+        {
+            ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("players.dat"));
+            b = (String [])inputStream.readObject( );
+            inputStream.close( );
+        }
+        catch(FileNotFoundException e)
+        {
+            System.out.println("Cannot find file players.dat.");
+            System.exit(0);
+        }
+        catch(ClassNotFoundException e)
+        {
+            System.out.println("Problems with file input.");
+            System.exit(0);
+        }
+        catch(IOException e)
+        {
+            System.out.println("Problems with file input.");
+            System.exit(0);
+        }
+
+        System.out.println(
+                "The following array elements were read from the file:");
+        int j;
+        for (j = 0; j < b.length; j++)
+            System.out.println(b[j]);
+
+        System.out.println("End of program.");
+    }
 
     private static void updateFile(){
         for (int i = 0; i < 100; i++) {
@@ -421,49 +470,7 @@ public class Nimsys {
             }
         }
     }
-//    public static void readTxtFile(String filePath){
-//        try {
-//            String encoding="UTF-16";
-//            File file=new File(filePath);
-//            if(file.isFile() && file.exists()){ //判断文件是否存在
-//                InputStreamReader read = new InputStreamReader(new FileInputStream(file),encoding);//考虑到编码格式
-//                BufferedReader bufferedReader = new BufferedReader(read);
-//                String lineTxt = null;
-//                while((lineTxt = bufferedReader.readLine()) != null){
-//                    System.out.println(lineTxt);
-//                }
-//                read.close();
-//            }else{
-//                System.out.println("找不到指定的文件");
-//            }
-//        } catch (Exception e) {
-//            System.out.println("读取文件内容出错");
-//            e.printStackTrace();
-//        }
-//    }
-    private static void inputFlie(String filePath){
-        try{
-//            String encoding = "UTF-8";
-            File file= new File(filePath);
-            if (file.isFile() && file.exists()){
-                ObjectInputStream read = new ObjectInputStream(new FileInputStream(file));
-//                BufferedReader bufferedReader = new BufferedReader(read);
-//                int lineTxt = null;
-                while(read.read() != -1){
-                    System.out.println(read.read());
-                }
-                read.close();
-            }else{
-                System.out.println("找不到指定的文件");
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("读取文件内容出错");
-            e.printStackTrace();
-        } catch (IOException e) {
-            System.out.println("读取文件内容出错");
-            e.printStackTrace();
-        }
-    }
+
 
     public static void main(String[] args) {
         System.out.println("Welcome to Nim");
@@ -477,10 +484,11 @@ public class Nimsys {
         //initialize the NimPlayer array
         playerlist = new NimPlayer[100];
         Nimsys sys = new Nimsys();
+        read();
 
-        String fileName = "players.dat";
-        File file = new File(fileName);
-        inputFlie(fileName);
+//        String fileName = "players.dat";
+//        File file = new File(fileName);
+//        inputFlie(fileName);
 //        readTxtFile(fileName);
 
 //        write();
