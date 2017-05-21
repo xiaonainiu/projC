@@ -1,3 +1,5 @@
+import java.util.InputMismatchException;
+
 /**
  * Created by Shen YI(844373) syi2 on 2017/4/27.
  */
@@ -5,37 +7,65 @@
 public class NimGame {
     private int stonenum;
     private int upperbound;
-    private NimPlayer player1;
-    private NimPlayer player2;
+    //    private NimPlayer player1;
+//    private NimPlayer player2;
     private NimPlayer winner;
     private NimPlayer loser;
+//    private NimPlayer activeplayer;
 
     //To start a game with defined arguments
     //initial stone number, upper bound of stones can be remove at once, player 1 and player 2.
     public NimGame(int initialstones, int upperbound, NimPlayer player1, NimPlayer player2) {
         this.stonenum = initialstones;
         this.upperbound = upperbound;
-        this.player1 = player1;
-        this.player2 = player2;
         System.out.println();
         System.out.println("Initial stone count: " + initialstones);
         System.out.println("Maximum stone removal: " + upperbound);
         System.out.println("Player 1: " + player1.getLastname() + " " + player1.getFirstname());
         System.out.println("Player 2: " + player2.getLastname() + " " + player2.getFirstname());
 
-        printNimstoneinfo();
+//        printNimstoneinfo();
 
         //To define the active player, which is going to play next, or win.
         int turn = 0;
-        NimPlayer activeplayer = null;
 
         while (!checkEmpty()) {
+            int removeNum = 0;
             if (turn % 2 == 0) {
-                while (!playingNim(player1)) ;
-                activeplayer = player2;
+                while (true) {
+                    try{
+                        removeNum = player1.playingNim(stonenum);
+                    }catch (InputMismatchException e){
+                        printInvalidInfo();
+                        Nimsys.keyboard.next();
+                        continue;
+                    }
+
+                    if (!checkInvalidinput(removeNum)){
+                        break;
+                    }
+                    printInvalidInfo();
+                }
+                removeStone(removeNum);
+                this.winner = player2;
+                this.loser = player1;
             } else {
-                while (!playingNim(player2)) ;
-                activeplayer = player1;
+                while (true) {
+                    try{
+                        removeNum = player2.playingNim(stonenum);
+                    }catch (InputMismatchException e){
+                        printInvalidInfo();
+                        Nimsys.keyboard.next();
+                        continue;
+                    }
+                    if (!checkInvalidinput(removeNum)){
+                        break;
+                    }
+                    printInvalidInfo();
+                }
+                removeStone(removeNum);
+                this.winner = player1;
+                this.loser = player2;
             }
             turn++;
         }
@@ -43,41 +73,16 @@ public class NimGame {
         System.out.println();
         System.out.println("Game Over");
 
-        //Update the players' information
-        if (turn % 2 == 0) {
-            this.winner = player1;
-            this.loser = player2;
-        } else {
-            this.winner = player2;
-            this.loser = player1;
-        }
-
-        System.out.println(activeplayer.getLastname() + " " + activeplayer.getFirstname() + " wins!");
+        System.out.println(winner.getLastname() + " " + winner.getFirstname() + " wins!");
         return;
-    }
-
-    //Playing process.
-    private boolean playingNim(NimPlayer player) {
-        System.out.println(player.getLastname() + "'s turn - remove how many?");
-        int removenum = Nimsys.keyboard.nextInt();
-
-        if (checkValidinput(removenum)) {
-            System.out.println();
-            System.out.println("Invalid move. You must remove between 1 and " + min() + " stones.");
-            printNimstoneinfo();
-            return false;
-        } else {
-            removeStone(removenum);
-            return true;
-        }
     }
 
     //To remove stones, if there is stones left, show the stone's information
     private void removeStone(int removenum) {
         stonenum = stonenum - removenum;
-        if (!checkEmpty()) {
-            printNimstoneinfo();
-        }
+//        if (!checkEmpty()) {
+//            printNimstoneinfo();
+//        }
     }
 
     //To check if there is no stone left
@@ -89,19 +94,15 @@ public class NimGame {
     }
 
     //To check if the input number is valid
-    private boolean checkValidinput(int removenum) {
+    private boolean checkInvalidinput(int removenum) {
         return (removenum > upperbound || removenum < 1 || removenum > stonenum);
     }
 
-    //show the stone's information
-    private void printNimstoneinfo() {
-        System.out.println();
-        System.out.print(stonenum + " stones left:");
-        for (int i = 0; i < stonenum; i++) {
-            System.out.print(" *");
-        }
-        System.out.println();
 
+    private void printInvalidInfo(){
+        System.out.println();
+        System.out.println("Invalid move. You must remove between 1 and " + min() + " stones.");
+//        printNimstoneinfo();
     }
 
     //Output the upper bound

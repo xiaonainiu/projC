@@ -92,16 +92,32 @@ public class NimPlayer {
         this.game++;
     }
 
-    public String getUpdatefile(){
-        String players = username+","+lastname+","+firstname+","+game+","+win;
+    public String getUpdatefile() {
+        String players = username + "," + lastname + "," + firstname + "," + game + "," + win;
         return players;
     }
 
-    public void updateWin(int win){
+    public void updateWin(int win) {
         this.win = win;
     }
 
-    public void updateGame(int game){
+    public void updateGame(int game) {
         this.game = game;
+    }
+
+    public int playingNim(int num) {
+        printNimstoneinfo(num);
+        System.out.println(lastname + "'s turn - remove how many?");
+        int removeNumber = Nimsys.keyboard.nextInt();
+        return removeNumber;
+    }
+
+    private void printNimstoneinfo(int stonenum) {
+        System.out.println();
+        System.out.print(stonenum + " stones left:");
+        for (int i = 0; i < stonenum; i++) {
+            System.out.print(" *");
+        }
+        System.out.println();
     }
 }
