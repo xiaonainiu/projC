@@ -5,10 +5,10 @@
 public class NimGame {
     private int stonenum;
     private int upperbound;
-    NimPlayer player1;
-    NimPlayer player2;
-    NimPlayer winner;
-    NimPlayer loser;
+    private NimPlayer player1;
+    private NimPlayer player2;
+    private NimPlayer winner;
+    private NimPlayer loser;
 
     //To start a game with defined arguments
     //initial stone number, upper bound of stones can be remove at once, player 1 and player 2.

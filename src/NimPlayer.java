@@ -75,8 +75,8 @@ public class NimPlayer {
 
     //    reset the statistics of this player
     public void reset() {
-        this.game = 0;
-        this.win = 0;
+        updateGame(0);
+        updateWin(0);
     }
 
     //update this player's statistics win one more games
@@ -92,13 +92,16 @@ public class NimPlayer {
         this.game++;
     }
 
-    public String[] getUpdatefile(){
-        String[] players = new String[5];
-        players[0]=username;
-        players[1]=lastname;
-        players[2]=firstname;
-        players[3]=Integer.toString(game);
-        players[4]=Integer.toString(win);
+    public String getUpdatefile(){
+        String players = username+","+lastname+","+firstname+","+game+","+win;
         return players;
+    }
+
+    public void updateWin(int win){
+        this.win = win;
+    }
+
+    public void updateGame(int game){
+        this.game = game;
     }
 }
