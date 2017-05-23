@@ -4,20 +4,20 @@
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Objects;
+//import java.util.Objects;
 import java.util.Scanner;
-import java.io.PrintWriter;
+//import java.io.PrintWriter;
 import java.io.FileOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.InputStreamReader;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
+//import java.io.InputStreamReader;
+//import java.io.BufferedReader;
+//import java.io.FileNotFoundException;
 import java.io.ObjectOutputStream;
-import java.io.FileOutputStream;
+//import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
-import java.io.IOException;
-import java.io.FileNotFoundException;
+//import java.io.IOException;
+//import java.io.FileNotFoundException;
 
 public class Nimsys {
     static Scanner keyboard;
@@ -121,7 +121,7 @@ public class Nimsys {
     }
 
     private void invalidCommand(String command) {
-        System.out.println(command + " is not a valid command");
+        System.out.println("'"+command + "' is not a valid command.");
     }
 
     private void invalidArgument() {
@@ -156,7 +156,7 @@ public class Nimsys {
         if (index == 100) {
             System.out.println("full");
         } else if (playerlist[index] == null) {
-            playerlist[index] = new NimHumanPlayer(username, lastname, firstname);
+            playerlist[index] = new NimHumanPlayer(username, lastname, firstname, false);
         } else if (playerlist[index].username.equals(username)) {
             System.out.println("The player already exists.");
         } else {
@@ -165,7 +165,7 @@ public class Nimsys {
                     playerlist[i] = playerlist[i - 1];
                 }
             }
-            playerlist[index] = new NimHumanPlayer(username, lastname, firstname);
+            playerlist[index] = new NimHumanPlayer(username, lastname, firstname, false);
         }
     }
 
@@ -177,7 +177,7 @@ public class Nimsys {
         if (index == 100) {
             System.out.println("full");
         } else if (playerlist[index] == null) {
-            playerlist[index] = new NimAIPlayer(username, lastname, firstname);
+            playerlist[index] = new NimAIPlayer(username, lastname, firstname, true);
         } else if (playerlist[index].username.equals(username)) {
             System.out.println("The player already exists.");
         } else {
@@ -186,7 +186,7 @@ public class Nimsys {
                     playerlist[i] = playerlist[i - 1];
                 }
             }
-            playerlist[index] = new NimAIPlayer(username, lastname, firstname);
+            playerlist[index] = new NimAIPlayer(username, lastname, firstname, true);
         }
     }
 
@@ -390,8 +390,7 @@ public class Nimsys {
     }
 
     private void read() {
-        System.out.println(
-                "Now let's reopen the file and display the array.");
+//        System.out.println("Now let's reopen the file and display the array.");
 
         String[] b = null;
 
@@ -410,33 +409,47 @@ public class Nimsys {
             System.exit(0);
         }
 
-        System.out.println(
-                "The following array elements were read from the file:");
+//        System.out.println("The following array elements were read from the file:");
         int j;
         for (j = 0; j < b.length; j++) {
             if (b[j] != null) {
-                System.out.println(b[j]);
+//                System.out.println(b[j]);
                 String[] playerinfo = b[j].split(",");
                 try {
-                    addPlayer(playerinfo[0], playerinfo[1], playerinfo[2]);
-                    NimPlayer player = playerlist[checkExist(playerinfo[1])];
-                    try {
-                        int game = Integer.valueOf(playerinfo[3]);
-                        int win = Integer.valueOf(playerinfo[4]);
-                        player.updateGame(game);
-                        player.updateGame(win);
+                    if (playerinfo[5].equals("true")){
+                        addAIPlayer(playerinfo[0], playerinfo[1], playerinfo[2]);
+                        NimPlayer player = playerlist[checkExist(playerinfo[1])];
+                        try {
+                            int game = Integer.valueOf(playerinfo[3]);
+                            int win = Integer.valueOf(playerinfo[4]);
+                            player.updateGame(game);
+                            player.updateWin(win);
 
-                    } catch (NumberFormatException e) {
-                        e.printStackTrace();
+                        } catch (NumberFormatException e) {
+                            e.printStackTrace();
+                        }
+                    }else {
+                        addPlayer(playerinfo[0], playerinfo[1], playerinfo[2]);
+                        NimPlayer player = playerlist[checkExist(playerinfo[0])];
+                        try {
+                            int game = Integer.valueOf(playerinfo[3]);
+                            int win = Integer.valueOf(playerinfo[4]);
+                            player.updateGame(game);
+                            player.updateWin(win);
+
+                        } catch (NumberFormatException e) {
+                            e.printStackTrace();
+                        }
                     }
-
                 } catch (NullPointerException e) {
                     e.printStackTrace();
+                } catch (Exception e){
+                    System.out.println("Problems with file input.");
                 }
             }
         }
 
-        System.out.println("End of program.");
+//        System.out.println("End of program.");
     }
 
     private static void write() {
@@ -448,6 +461,7 @@ public class Nimsys {
 
             if (playerlist[i] != null) {
                 a[i] = player.getUpdatefile();
+//                System.out.println(a[i]);
             }
         }
         try {
@@ -460,8 +474,7 @@ public class Nimsys {
             System.exit(0);
         }
 
-        System.out.println(
-                "Array written to file players.dat.");
+//        System.out.println("Array written to file players.dat.");
 
 
     }

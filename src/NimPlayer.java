@@ -1,3 +1,5 @@
+import java.util.InputMismatchException;
+
 /**
  * Created by Shen YI(844373) syi2 on 2017/3/20.
  */
@@ -9,14 +11,16 @@ public class NimPlayer {
     String lastname;
     int game;
     int win;
+    boolean isAI;
 
     //    define a NimPlayer class
-    public NimPlayer(String username, String lastname, String firstname) {
+    public NimPlayer(String username, String lastname, String firstname, boolean isAI) {
         this.username = username;
         this.firstname = firstname;
         this.lastname = lastname;
         this.game = 0;
         this.win = 0;
+        this.isAI = isAI;
     }
 
     public String getUsername() {
@@ -47,7 +51,7 @@ public class NimPlayer {
 
     public String printPlayer() {
         String info;
-        info = username + "," + lastname + "," + firstname + "," + game + " games," + win + " wins";
+        info = username + "," + firstname + "," + lastname + "," + game + " games," + win + " wins";
         return info;
     }
 
@@ -63,7 +67,7 @@ public class NimPlayer {
     //    print the rankings information of this player
     public String printRankings() {
         String rank;
-        rank = printRatio() + " | " + printGame() + " games | " + lastname + " " + firstname;
+        rank = printRatio() + " | " + printGame() + " games | " + firstname + " " + lastname;
         return rank;
     }
 
@@ -93,7 +97,7 @@ public class NimPlayer {
     }
 
     public String getUpdatefile() {
-        String players = username + "," + lastname + "," + firstname + "," + game + "," + win;
+        String players = username + "," + lastname + "," + firstname + "," + game + "," + win+","+isAI;
         return players;
     }
 
@@ -103,21 +107,52 @@ public class NimPlayer {
 
     public void updateGame(int game) {
         this.game = game;
+//        System.out.println(username+" game = "+ this.game);
     }
 
-    public int playingNim(int num) {
-        printNimstoneinfo(num);
-        System.out.println(lastname + "'s turn - remove how many?");
-        int removeNumber = Nimsys.keyboard.nextInt();
+    public int playingNim(int stonenum,int upperbound) {
+
+
+        int removeNumber;
+        while (true){
+            try{
+                printNimstoneinfo(stonenum);
+                System.out.println(firstname + "'s turn - remove how many?");
+                removeNumber = Nimsys.keyboard.nextInt();
+            }catch (InputMismatchException e){
+                printInvalidInfo(stonenum,upperbound);
+                Nimsys.keyboard.next();
+                continue;
+            }
+
+            if (!checkInvalidinput(stonenum,removeNumber,upperbound)){
+                break;
+            }
+            printInvalidInfo(stonenum,upperbound);
+        }
         return removeNumber;
     }
 
-    private void printNimstoneinfo(int stonenum) {
+    private int min(int upperbound,int stonenum) {
+        if (upperbound <= stonenum) return upperbound;
+        else return stonenum;
+    }
+    protected void printInvalidInfo(int stonenum,int upperbound){
+        System.out.println();
+        System.out.println("Invalid move. You must remove between 1 and " + min(upperbound,stonenum) + " stones.");
+//        printNimstoneinfo(stonenum);
+    }
+
+    protected void printNimstoneinfo(int stonenum) {
         System.out.println();
         System.out.print(stonenum + " stones left:");
         for (int i = 0; i < stonenum; i++) {
             System.out.print(" *");
         }
         System.out.println();
+    }
+
+    protected boolean checkInvalidinput(int stonenum,int removenum, int upperbound) {
+        return (removenum > upperbound || removenum < 1 || removenum > stonenum);
     }
 }

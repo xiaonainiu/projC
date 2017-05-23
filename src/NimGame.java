@@ -21,8 +21,8 @@ public class NimGame {
         System.out.println();
         System.out.println("Initial stone count: " + initialstones);
         System.out.println("Maximum stone removal: " + upperbound);
-        System.out.println("Player 1: " + player1.getLastname() + " " + player1.getFirstname());
-        System.out.println("Player 2: " + player2.getLastname() + " " + player2.getFirstname());
+        System.out.println("Player 1: " + player1.getFirstname() + " " + player1.getLastname());
+        System.out.println("Player 2: " + player2.getFirstname() + " " + player2.getLastname());
 
 //        printNimstoneinfo();
 
@@ -32,37 +32,40 @@ public class NimGame {
         while (!checkEmpty()) {
             int removeNum = 0;
             if (turn % 2 == 0) {
-                while (true) {
-                    try{
-                        removeNum = player1.playingNim(stonenum);
-                    }catch (InputMismatchException e){
-                        printInvalidInfo();
-                        Nimsys.keyboard.next();
-                        continue;
-                    }
-
-                    if (!checkInvalidinput(removeNum)){
-                        break;
-                    }
-                    printInvalidInfo();
-                }
+                removeNum = player1.playingNim(stonenum,upperbound);
+//                while (true) {
+//                    try{
+//                        removeNum = player1.playingNim(stonenum,upperbound);
+//                    }catch (InputMismatchException e){
+//                        printInvalidInfo();
+//                        Nimsys.keyboard.next();
+//                        continue;
+//                    }
+//                    break;
+////                    if (!checkInvalidinput(removeNum)){
+////                        break;
+////                    }
+////                    printInvalidInfo();
+//                }
                 removeStone(removeNum);
                 this.winner = player2;
                 this.loser = player1;
             } else {
-                while (true) {
-                    try{
-                        removeNum = player2.playingNim(stonenum);
-                    }catch (InputMismatchException e){
-                        printInvalidInfo();
-                        Nimsys.keyboard.next();
-                        continue;
-                    }
-                    if (!checkInvalidinput(removeNum)){
-                        break;
-                    }
-                    printInvalidInfo();
-                }
+                removeNum = player2.playingNim(stonenum,upperbound);
+//                while (true) {
+//                    try{
+//                        removeNum = player2.playingNim(stonenum,upperbound);
+//                    }catch (InputMismatchException e){
+//                        printInvalidInfo();
+//                        Nimsys.keyboard.next();
+//                        continue;
+//                    }
+//                    break;
+////                    if (!checkInvalidinput(removeNum)){
+////                        break;
+////                    }
+////                    printInvalidInfo();
+//                }
                 removeStone(removeNum);
                 this.winner = player1;
                 this.loser = player2;
@@ -73,7 +76,7 @@ public class NimGame {
         System.out.println();
         System.out.println("Game Over");
 
-        System.out.println(winner.getLastname() + " " + winner.getFirstname() + " wins!");
+        System.out.println(winner.getFirstname() + " " + winner.getLastname() + " wins!");
         return;
     }
 
@@ -118,4 +121,6 @@ public class NimGame {
     public NimPlayer getLoser() {
         return loser;
     }
+
+//    public int getUpperbound(){return upperbound;}
 }
