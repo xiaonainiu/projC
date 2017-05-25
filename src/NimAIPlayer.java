@@ -1,7 +1,7 @@
 import java.util.InputMismatchException;
 
 /**
- * Created by ES on 2017/5/21.
+ * Created by Shen YI(844373) syi2 on 2017/5/21.
  */
 public class NimAIPlayer extends NimPlayer {
     public NimAIPlayer(String username, String lastname, String firstname, boolean isAI) {

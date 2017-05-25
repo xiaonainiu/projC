@@ -105,6 +105,17 @@ public class Nimsys {
 //                }
 //            }
         } else if (commandsplit[0].equals("startgame")) {
+            try{
+                String[] argument = commandsplit[1].split(",");
+                try{
+                    startGame(argument[0], argument[1], argument[2], argument[3]);
+                }catch (Exception e){
+                    invalidArgument();
+                }
+            }catch (Exception e){
+                invalidArgument();
+            }
+        } else if (commandsplit[0].equals("startadvancedgame")) {
             if (commandsplit.length == 2) {
                 String[] argument = commandsplit[1].split(",");
                 if (argument.length == 4) {
@@ -418,7 +429,7 @@ public class Nimsys {
                 try {
                     if (playerinfo[5].equals("true")){
                         addAIPlayer(playerinfo[0], playerinfo[1], playerinfo[2]);
-                        NimPlayer player = playerlist[checkExist(playerinfo[1])];
+                        NimPlayer player = playerlist[checkExist(playerinfo[0])];
                         try {
                             int game = Integer.valueOf(playerinfo[3]);
                             int win = Integer.valueOf(playerinfo[4]);
