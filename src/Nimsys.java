@@ -4,20 +4,12 @@
 
 import java.io.File;
 import java.io.IOException;
-//import java.util.Objects;
 import java.util.Scanner;
-//import java.io.PrintWriter;
 import java.io.FileOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-//import java.io.InputStreamReader;
-//import java.io.BufferedReader;
-//import java.io.FileNotFoundException;
 import java.io.ObjectOutputStream;
-//import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
-//import java.io.IOException;
-//import java.io.FileNotFoundException;
 
 public class Nimsys {
     static Scanner keyboard;
@@ -67,11 +59,6 @@ public class Nimsys {
             } catch (ArrayIndexOutOfBoundsException e) {
                 invalidArgument();
             }
-//            if (commandsplit.length == 2){
-//                editPlayer(commandsplit[1]);
-//            }else {
-//                invalidArgument();
-//            }
         } else if (commandsplit[0].equals("resetstats")) {
             try {
                 resetStats(commandsplit[1]);
@@ -84,26 +71,12 @@ public class Nimsys {
             } catch (ArrayIndexOutOfBoundsException e) {
                 displayPlayer();
             }
-//            if (commandsplit.length == 1) {
-//                displayPlayer(null);
-//            } else {
-//                displayPlayer(commandsplit[1]);
-//            }
         } else if (commandsplit[0].equals("rankings")) {
             try {
                 rankings(commandsplit[1]);
             } catch (ArrayIndexOutOfBoundsException e) {
                 rankings("desc");
             }
-//            if (commandsplit.length == 1) {
-//                rankings(null);
-//            } else {
-//                if (commandsplit[1]=="desc"||commandsplit[1]=="asc"){
-//                    rankings(commandsplit[1]);
-//                }else {
-//                    invalidArgument();
-//                }
-//            }
         } else if (commandsplit[0].equals("startgame")) {
             try{
                 String[] argument = commandsplit[1].split(",");
@@ -116,11 +89,15 @@ public class Nimsys {
                 invalidArgument();
             }
         } else if (commandsplit[0].equals("startadvancedgame")) {
-            if (commandsplit.length == 2) {
+            try{
                 String[] argument = commandsplit[1].split(",");
-                if (argument.length == 4) {
-                    startGame(argument[0], argument[1], argument[2], argument[3]);
-                } else invalidArgument();
+                try{
+                    startAdvancedgame(argument[0], argument[1], argument[2]);
+                }catch (Exception e){
+                    invalidArgument();
+                }
+            }catch (Exception e){
+                invalidArgument();
             }
         } else if (commandsplit[0].equals("exit")) {
             write();
@@ -181,8 +158,6 @@ public class Nimsys {
     }
 
     private void addAIPlayer(String username, String lastname, String firstname) {
-//        String[] argu = playerinfo.split(",");
-//        String username = argu[0];
 
         int index = checkExist(username);
         if (index == 100) {
@@ -204,7 +179,6 @@ public class Nimsys {
     //    Check the commend first.
 //    Then, remove all players or remove the aim player if exist.
     private void removePlayer(String username) {
-//        String username = playerinfo;
 
         int index = checkExist(username);
         if (playerlist[index] == null) {
@@ -235,10 +209,6 @@ public class Nimsys {
 
     //    Update the player's first name and last name if the player is exist.
     private void editPlayer(String username, String lastname, String firstname) {
-//        String[] argu = playerinfo.split(",");
-//        String username = argu[0];
-//        String firstname = argu[1];
-//        String lastname = argu[2];
 
         int index = checkExist(username);
         if (playerlist[index] == null) {
@@ -256,12 +226,6 @@ public class Nimsys {
     //Check the commend first.
     //Then, reset all statistics or reset the aim player's statistics.
     private void resetStats(String username) {
-//        String username = playerinfo;
-
-//        if (username == null) {
-//
-//            return;
-//        }
 
         int index = checkExist(username);
         if (playerlist[index] == null) {
@@ -291,21 +255,9 @@ public class Nimsys {
     //Check the commend first.
     //Then, display all player's information or display the aim player's information.
     private void displayPlayer(String username) {
-//        String username = playerinfo;
-
-//        if (username == null) {
-//            for (int i = 0; i < 100; i++) {
-//                NimPlayer player = playerlist[i];
-//                if (playerlist[i] != null) {
-//                    System.out.println(player.printPlayer());
-//                } else {
-//                    return;
-//                }
-//            }
-//        }
 
         int index = checkExist(username);
-        if (index == 100 || playerlist[index] == null) {
+        if (index == 100 || playerlist[index] == null||!playerlist[index].username.equals(username)) {
             System.out.println("The player does not exist.");
         } else {
             NimPlayer player = playerlist[index];
@@ -387,6 +339,27 @@ public class Nimsys {
             System.out.println("One of the players does not exist.");
         } else {
             NimGame game = new NimGame(initialstones, upperbound, player1, player2);
+            game.playingGame(player1,player2);
+            game.getWinner().Win();
+            game.getLoser().Lose();
+        }
+    }
+
+    private void startAdvancedgame(String stones,String username1, String username2){
+        int initialstones = Integer.parseInt(stones);
+        int index1 = checkExist(username1);
+        int index2 = checkExist(username2);
+        NimPlayer player1 = playerlist[index1];
+        NimPlayer player2 = playerlist[index2];
+
+        if (player1 == null || player2 == null) {
+            System.out.println("One of the players does not exist.");
+            return;
+        } else if (!player1.getUsername().equals(username1) || !player2.getUsername().equals(username2)) {
+            System.out.println("One of the players does not exist.");
+        } else {
+            AdvancedGame game = new AdvancedGame(initialstones, player1, player2);
+            game.playingGame(player1,player2);
             game.getWinner().Win();
             game.getLoser().Lose();
         }
@@ -424,7 +397,6 @@ public class Nimsys {
         int j;
         for (j = 0; j < b.length; j++) {
             if (b[j] != null) {
-//                System.out.println(b[j]);
                 String[] playerinfo = b[j].split(",");
                 try {
                     if (playerinfo[5].equals("true")){
@@ -459,8 +431,6 @@ public class Nimsys {
                 }
             }
         }
-
-//        System.out.println("End of program.");
     }
 
     private static void write() {
@@ -472,7 +442,6 @@ public class Nimsys {
 
             if (playerlist[i] != null) {
                 a[i] = player.getUpdatefile();
-//                System.out.println(a[i]);
             }
         }
         try {
@@ -484,10 +453,6 @@ public class Nimsys {
             System.out.println("Error writing to file.");
             System.exit(0);
         }
-
-//        System.out.println("Array written to file players.dat.");
-
-
     }
 
 
@@ -497,7 +462,6 @@ public class Nimsys {
 
 
         //initialize the NimPlayer array
-//        playerlist = new NimPlayer[100];
         Nimsys sys = new Nimsys();
         String fileName = "players.dat";
         File fileObject = new File(fileName);

@@ -1,10 +1,8 @@
-import java.util.InputMismatchException;
-
 /**
  * Created by Shen YI(844373) syi2 on 2017/3/20.
  */
 
-public class NimPlayer {
+public abstract class NimPlayer {
 
     String username;
     String firstname;
@@ -107,31 +105,11 @@ public class NimPlayer {
 
     public void updateGame(int game) {
         this.game = game;
-//        System.out.println(username+" game = "+ this.game);
     }
 
-    public int playingNim(int stonenum,int upperbound) {
+    public abstract int playingNim(int stonenum,int upperbound);
 
-
-        int removeNumber;
-        while (true){
-            try{
-                printNimstoneinfo(stonenum);
-                System.out.println(firstname + "'s turn - remove how many?");
-                removeNumber = Nimsys.keyboard.nextInt();
-            }catch (InputMismatchException e){
-                printInvalidInfo(stonenum,upperbound);
-                Nimsys.keyboard.next();
-                continue;
-            }
-
-            if (!checkInvalidinput(stonenum,removeNumber,upperbound)){
-                break;
-            }
-            printInvalidInfo(stonenum,upperbound);
-        }
-        return removeNumber;
-    }
+    public abstract int[] playingAdvanced(boolean stone[], int stonenum);
 
     private int min(int upperbound,int stonenum) {
         if (upperbound <= stonenum) return upperbound;
@@ -140,7 +118,6 @@ public class NimPlayer {
     protected void printInvalidInfo(int stonenum,int upperbound){
         System.out.println();
         System.out.println("Invalid move. You must remove between 1 and " + min(upperbound,stonenum) + " stones.");
-//        printNimstoneinfo(stonenum);
     }
 
     protected void printNimstoneinfo(int stonenum) {
@@ -154,5 +131,18 @@ public class NimPlayer {
 
     protected boolean checkInvalidinput(int stonenum,int removenum, int upperbound) {
         return (removenum > upperbound || removenum < 1 || removenum > stonenum);
+    }
+
+    protected void printAdvancedinfo(boolean stone[],int stonenum){
+        System.out.println();
+        System.out.print(stonenum+" stones left:");
+        for (int i = 0;i<stone.length;i++){
+            if (stone[i]==true){
+                System.out.print(" <"+(i+1)+",*>");
+            }else {
+                System.out.print(" <"+(i+1)+",x>");
+            }
+        }
+        System.out.println();
     }
 }
